@@ -1,6 +1,6 @@
 const fs = require('fs');
 const inquirer = require('inquirer');
-
+const { Triangle, Circle, Square } = require('./lib/shapes');
 
 inquirer
   .prompt([
@@ -32,26 +32,5 @@ inquirer
       message: 'Enter the color for the shape:',
     },
   ])
-  .then((answers) => {
-    const { text, textColor, shape, shapeColor } = answers;
-    const logoPath = 'logo.svg';
 
-    let shapeInstance;
-
-    switch (shape) {
-      case 'Triangle':
-        shapeInstance = new Triangle();
-        break;
-      case 'Circle':
-        shapeInstance = new Circle();
-        break;
-      case 'Square':
-        shapeInstance = new Square();
-        break;
-      default:
-        shapeInstance = new Square();
-    }
-
-    shapeInstance.setColor(shapeColor);
-  });
 
