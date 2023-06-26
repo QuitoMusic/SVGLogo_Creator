@@ -18,7 +18,7 @@ inquirer
     {
       type: 'input',
       name: 'textColor',
-      message: 'Enter the color for the logo text:',
+      message: 'Enter the hexadecimal number or the color for the logo text:',
     },
     {
       type: 'list',
@@ -29,8 +29,45 @@ inquirer
     {
       type: 'input',
       name: 'shapeColor',
-      message: 'Enter the color for the shape:',
+      message: 'Enter the hexadecimal number or the color for the shape:',
     },
   ])
+  .then((answers) => {
+    const { text, textColor, shape, shapeColor } = answers;
+    const logoPath = 'logo.svg';
 
+    let shapeInstance;
 
+    switch (shape) {
+      case 'Triangle':
+        shapeInstance = new Triangle();
+        break;
+      case 'Circle':
+        shapeInstance = new Circle();
+        break;
+      case 'Square':
+        shapeInstance = new Square();
+        break;
+      default:
+        shapeInstance = new Square();
+    }
+
+    shapeInstance.setColor(shapeColor);
+
+    const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="300" height="200">
+    ${shapeInstance.render()}
+    <text x="50%" y="50%" fill="${textColor}" text-anchor="middle" alignment-baseline="middle" font-family="Arial" font-size="48">${text}</text>
+  </svg>`;
+
+    fs.writeFile(logoPath, svg, (err) => {
+      if (err) {
+        console.error('Error occurred while generating the logo:', err);
+      } else {
+        console.log(`Generated ${logoPath}`);
+      }
+    });
+  })
+  .catch((error) => {
+    console.error('Error occurred while prompting for input:', error);
+  });
